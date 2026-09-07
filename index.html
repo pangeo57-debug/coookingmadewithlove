@@ -365,10 +365,45 @@
     resize: vertical;
   }
   .preorder-form input:focus-visible,
-  .preorder-form textarea:focus-visible{
+  .preorder-form textarea:focus-visible,
+  .preorder-form select:focus-visible{
     outline: 2px solid var(--maroon);
     outline-offset: 1px;
   }
+  .preorder-form .phone-row{
+    display: flex;
+    gap: 8px;
+  }
+  .preorder-form .phone-row select{
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--rose-line);
+    border-radius: 10px;
+    padding: 10px 6px;
+    flex: none;
+    width: 92px;
+  }
+  .preorder-form .phone-row input{ flex: 1; min-width: 0; }
+  .preorder-form .radio-row{
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 2px;
+  }
+  .preorder-form .radio-option{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .preorder-form .radio-option input{ accent-color: var(--maroon); width: 16px; height: 16px; }
   .preorder-form button{
     width: 100%;
     font: inherit;
@@ -851,12 +886,31 @@
 
       <div class="field">
         <label for="po-phone">Phone</label>
-        <input type="tel" id="po-phone" name="phone" required autocomplete="tel">
+        <div class="phone-row">
+          <select id="po-country" aria-label="Country code">
+            <option value="+1" selected>+1 US/CA</option>
+            <option value="+30">+30 GR</option>
+            <option value="+44">+44 UK</option>
+            <option value="+49">+49 DE</option>
+            <option value="+52">+52 MX</option>
+            <option value="">Other</option>
+          </select>
+          <input type="tel" id="po-phone" required autocomplete="tel" placeholder="586 838 7287">
+        </div>
+        <input type="hidden" id="po-phone-full" name="phone">
       </div>
 
       <div class="field">
         <label for="po-date">Which Saturday?</label>
         <input type="date" id="po-date" name="pickup-date">
+      </div>
+
+      <div class="field">
+        <label>Pickup</label>
+        <div class="radio-row">
+          <label class="radio-option"><input type="radio" name="pickup-location" value="At the Market" checked> At the Market</label>
+          <label class="radio-option"><input type="radio" name="pickup-location" value="From the House"> From the House</label>
+        </div>
       </div>
 
       <div class="field">
@@ -998,6 +1052,13 @@
   if (preorderForm) {
     preorderForm.addEventListener('submit', function (e) {
       e.preventDefault();
+
+      var countryCode = document.getElementById('po-country').value;
+      var phoneNumber = document.getElementById('po-phone').value.trim();
+      document.getElementById('po-phone-full').value = countryCode
+        ? (countryCode + ' ' + phoneNumber)
+        : phoneNumber;
+
       var data = new FormData(preorderForm);
       fetch('/', {
         method: 'POST',
