@@ -404,6 +404,28 @@
     cursor: pointer;
   }
   .preorder-form .radio-option input{ accent-color: var(--maroon); width: 16px; height: 16px; }
+
+  .preorder-form .item-checklist{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+    padding-top: 2px;
+  }
+  .preorder-form .item-check{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .preorder-form .item-check input{ accent-color: var(--maroon); width: 16px; height: 16px; flex: none; }
+  @media (max-width: 420px){
+    .preorder-form .item-checklist{ grid-template-columns: 1fr; }
+  }
   .preorder-form button{
     width: 100%;
     font: inherit;
@@ -901,21 +923,35 @@
       </div>
 
       <div class="field">
-        <label for="po-date">Which Saturday?</label>
-        <input type="date" id="po-date" name="pickup-date">
-      </div>
-
-      <div class="field">
         <label>Pickup</label>
         <div class="radio-row">
-          <label class="radio-option"><input type="radio" name="pickup-location" value="At the Market" checked> At the Market</label>
-          <label class="radio-option"><input type="radio" name="pickup-location" value="From the House"> From the House</label>
+          <label class="radio-option"><input type="radio" name="pickup-location" id="po-pickup-market" value="At the Market" checked> At the Market</label>
+          <label class="radio-option"><input type="radio" name="pickup-location" id="po-pickup-house" value="From the House"> From the House</label>
         </div>
       </div>
 
       <div class="field">
-        <label for="po-order">What would you like?</label>
-        <textarea id="po-order" name="order" rows="3" placeholder="e.g. 2 cinnamon rolls, 1 sourdough loaf" required></textarea>
+        <label for="po-date" id="po-date-label">Which Saturday?</label>
+        <input type="date" id="po-date" name="pickup-date">
+      </div>
+
+      <div class="field">
+        <label>What would you like?</label>
+        <div class="item-checklist">
+          <label class="item-check"><input type="checkbox" name="items" value="Sourdough Bread"> Sourdough Bread</label>
+          <label class="item-check"><input type="checkbox" name="items" value="Pretzel Sourdough"> Pretzel Sourdough</label>
+          <label class="item-check"><input type="checkbox" name="items" value="Baguette"> Baguette</label>
+          <label class="item-check"><input type="checkbox" name="items" value="Cinnamon Rolls"> Cinnamon Rolls</label>
+          <label class="item-check"><input type="checkbox" name="items" value="Oreo Cinnamon Rolls"> Oreo Cinnamon Rolls</label>
+          <label class="item-check"><input type="checkbox" name="items" value="Chocolate Chip Cookies"> Chocolate Chip Cookies</label>
+          <label class="item-check"><input type="checkbox" name="items" value="Baklava"> Baklava</label>
+          <label class="item-check"><input type="checkbox" name="items" value="Doughnuts"> Doughnuts</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="po-order">Quantities / notes</label>
+        <textarea id="po-order" name="order" rows="2" placeholder="e.g. 2x cinnamon rolls, 1x sourdough loaf"></textarea>
       </div>
 
       <button type="submit">Send Preorder Request</button>
@@ -1048,6 +1084,17 @@
 </footer>
 
 <script>
+  var pickupMarket = document.getElementById('po-pickup-market');
+  var pickupHouse = document.getElementById('po-pickup-house');
+  var dateLabel = document.getElementById('po-date-label');
+  if (pickupMarket && pickupHouse && dateLabel) {
+    var updateDateLabel = function () {
+      dateLabel.textContent = pickupHouse.checked ? 'Which day?' : 'Which Saturday?';
+    };
+    pickupMarket.addEventListener('change', updateDateLabel);
+    pickupHouse.addEventListener('change', updateDateLabel);
+  }
+
   var preorderForm = document.getElementById('preorder-form');
   if (preorderForm) {
     preorderForm.addEventListener('submit', function (e) {
