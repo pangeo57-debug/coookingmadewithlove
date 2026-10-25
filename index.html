@@ -802,9 +802,138 @@
 
     .faq-list{ max-width: 760px; }
   }
+
+  /* ---------- Oven intro ---------- */
+
+  .intro{ display: none; }
+  .intro-pending body{ overflow: hidden; }
+  .intro-pending .intro{
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 18px;
+    background: var(--bg);
+    cursor: pointer;
+    transition: opacity 0.6s ease;
+  }
+  .intro.is-done{ opacity: 0; pointer-events: none; }
+
+  .intro-stage{ position: relative; width: 280px; height: 280px; }
+  .intro-oven{
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    animation: ovenIn 0.5s ease-out both, ovenOut 0.6s ease-in 1.7s forwards;
+  }
+  .intro-door{
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: doorOpen 0.5s cubic-bezier(.5,0,.3,1) 0.5s forwards;
+  }
+  .intro-roll{
+    position: absolute; left: 105px; top: 140px; width: 70px; height: 70px;
+    opacity: 0;
+    animation: rollOut 0.9s cubic-bezier(.3,.7,.3,1) 0.85s forwards, rollFade 0.6s ease 1.8s forwards;
+  }
+  .intro-steam{
+    position: absolute; left: 100px; top: 40px; width: 80px; height: 80px;
+    opacity: 0;
+    animation: steam 1.4s ease-out 1.1s forwards;
+  }
+  .intro-photo{
+    position: absolute; left: 40px; top: 40px; width: 200px; height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 58% 55%;
+    border: 6px solid var(--surface);
+    box-shadow: 0 18px 50px -18px rgba(139, 90, 66, 0.55);
+    opacity: 0;
+    animation: photoIn 0.9s ease-out 1.75s forwards;
+  }
+  .intro-caption{
+    font-family: "Caveat", cursive;
+    font-size: 2.1rem;
+    color: var(--maroon);
+    opacity: 0;
+    animation: captionIn 0.6s ease-out 2.1s forwards;
+  }
+  .intro-skip{
+    position: absolute; bottom: 28px;
+    font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  @keyframes ovenIn{ from{ opacity: 0; transform: translateY(14px) scale(.96); } to{ opacity: 1; transform: none; } }
+  @keyframes ovenOut{ to{ opacity: 0; transform: scale(.92); } }
+  @keyframes doorOpen{ to{ transform: scaleY(-0.22); } }
+  @keyframes rollOut{
+    0%{ opacity: 1; transform: translateY(0) scale(1); }
+    100%{ opacity: 1; transform: translateY(-35px) scale(2.6); }
+  }
+  @keyframes rollFade{ to{ opacity: 0; } }
+  @keyframes steam{
+    0%{ opacity: 0; transform: translateY(18px); }
+    40%{ opacity: .9; }
+    100%{ opacity: 0; transform: translateY(-26px); }
+  }
+  @keyframes photoIn{
+    from{ opacity: 0; transform: scale(.9); filter: blur(8px); }
+    to{ opacity: 1; transform: scale(1); filter: blur(0); }
+  }
+  @keyframes captionIn{ from{ opacity: 0; transform: translateY(8px); } to{ opacity: 1; transform: none; } }
 </style>
+<script>
+  try {
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('cmwl-intro')) {
+      document.documentElement.classList.add('intro-pending');
+    }
+  } catch (e) {}
+</script>
 </head>
 <body>
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-stage">
+    <svg class="intro-oven" viewBox="0 0 240 240">
+      <defs>
+        <radialGradient id="ovenGlow" cx="50%" cy="60%" r="65%">
+          <stop offset="0%" stop-color="#F6B26B"/>
+          <stop offset="100%" stop-color="#8B4A2B"/>
+        </radialGradient>
+      </defs>
+      <rect x="20" y="30" width="200" height="190" rx="18" fill="#EFD3B8" stroke="#8B5A42" stroke-width="3"/>
+      <rect x="20" y="30" width="200" height="38" rx="18" fill="#A9765C"/>
+      <rect x="20" y="52" width="200" height="16" fill="#A9765C"/>
+      <circle cx="52" cy="49" r="7" fill="#FBEEE0"/>
+      <circle cx="78" cy="49" r="7" fill="#FBEEE0"/>
+      <rect x="134" y="42" width="58" height="14" rx="4" fill="#5A4038"/>
+      <rect x="40" y="82" width="160" height="120" rx="10" fill="url(#ovenGlow)"/>
+      <g class="intro-door">
+        <rect x="36" y="78" width="168" height="128" rx="12" fill="#A9765C" stroke="#8B5A42" stroke-width="3"/>
+        <rect x="58" y="100" width="124" height="74" rx="8" fill="url(#ovenGlow)" opacity="0.85"/>
+        <rect x="70" y="86" width="100" height="6" rx="3" fill="#FBEEE0"/>
+      </g>
+    </svg>
+
+    <svg class="intro-steam" viewBox="0 0 80 80" fill="none" stroke="#C9906B" stroke-width="3" stroke-linecap="round">
+      <path d="M22 70c-8-10 8-16 0-28s8-18 0-30"/>
+      <path d="M40 74c-8-10 8-16 0-28s8-18 0-30"/>
+      <path d="M58 70c-8-10 8-16 0-28s8-18 0-30"/>
+    </svg>
+
+    <svg class="intro-roll" viewBox="0 0 70 70">
+      <circle cx="35" cy="35" r="32" fill="#D9A066" stroke="#8B5A42" stroke-width="2"/>
+      <path d="M36.5 35.0 L36.6 35.2 L36.7 35.4 L36.8 35.6 L36.9 35.8 L36.9 36.1 L36.9 36.4 L36.8 36.7 L36.7 36.9 L36.6 37.2 L36.4 37.5 L36.2 37.8 L35.9 38.0 L35.6 38.2 L35.3 38.4 L34.9 38.5 L34.5 38.6 L34.1 38.7 L33.6 38.7 L33.2 38.6 L32.7 38.5 L32.3 38.4 L31.9 38.2 L31.4 37.9 L31.0 37.6 L30.7 37.2 L30.3 36.8 L30.0 36.3 L29.8 35.8 L29.6 35.2 L29.5 34.7 L29.4 34.0 L29.4 33.4 L29.5 32.8 L29.6 32.1 L29.9 31.5 L30.2 30.9 L30.5 30.3 L31.0 29.7 L31.5 29.2 L32.1 28.8 L32.7 28.4 L33.4 28.0 L34.1 27.7 L34.9 27.6 L35.7 27.5 L36.5 27.4 L37.4 27.5 L38.2 27.7 L39.0 28.0 L39.8 28.3 L40.6 28.8 L41.4 29.3 L42.0 30.0 L42.6 30.7 L43.2 31.5 L43.7 32.3 L44.0 33.2 L44.3 34.2 L44.5 35.2 L44.5 36.2 L44.5 37.2 L44.3 38.3 L44.0 39.3 L43.6 40.3 L43.1 41.3 L42.5 42.2 L41.8 43.1 L40.9 43.9 L40.0 44.6 L39.0 45.2 L38.0 45.7 L36.8 46.1 L35.6 46.3 L34.4 46.5 L33.2 46.5 L31.9 46.4 L30.7 46.1 L29.5 45.7 L28.3 45.1 L27.2 44.5 L26.1 43.7 L25.1 42.8 L24.2 41.7 L23.5 40.6 L22.8 39.4 L22.3 38.1 L21.9 36.7 L21.6 35.3 L21.5 33.9 L21.6 32.4 L21.8 31.0 L22.2 29.6 L22.7 28.2 L23.4 26.8 L24.3 25.5 L25.2 24.3 L26.3 23.2 L27.6 22.3 L28.9 21.4 L30.4 20.7 L31.9 20.2 L33.5 19.8 L35.1 19.6 L36.8 19.6 L38.4 19.7 L40.1 20.0 L41.7 20.5 L43.3 21.2 L44.8 22.1 L46.2 23.1 L47.5 24.3 L48.7 25.6 L49.7 27.0 L50.6 28.6 L51.3 30.3 L51.9 32.0 L52.3 33.8 L52.4 35.7 L52.4 37.5 L52.1 39.4 L51.7 41.3 L51.1 43.1 L50.2 44.8 L49.2 46.4 L48.0 48.0 L46.6 49.4 L45.1 50.7 L43.4 51.8 L41.6 52.7 L39.7 53.5 L37.8 54.0 L35.7 54.3 L33.7 54.4 L31.6 54.3 L29.5 53.9 L27.5 53.4 L25.5 52.6 L23.6 51.6 L21.8 50.4 L20.1 49.0 L18.6 47.4 L17.3 45.6 L16.1 43.7 L15.2 41.7 L14.4 39.6 L13.9 37.4 L13.7 35.1 L13.6 32.8 L13.8 30.6 L14.3 28.3 L15.0 26.1 L16.0 23.9 L17.2 21.9 L18.6 19.9 L20.2 18.2 L22.0 16.6 L23.9 15.2 L26.1 14.0 L28.3 13.0 L30.7 12.3 L33.1 11.8 L35.6 11.6 L38.1 11.7 L40.6 12.0 L43.1 12.6 L45.5 13.5 L47.8 14.6 L49.9 16.0 L52.0 17.6 L53.8 19.4 L55.5 21.4 L57.0 23.6 L58.2 26.0 L59.1 28.5 L59.8 31.1 L60.2 33.7 L60.4 36.4 L60.2 39.2 L59.7 41.9 L59.0 44.5 L58.0 47.1 L56.7 49.5 L55.1 51.8 L53.3 54.0 L51.2 55.9 L49.0 57.6 L46.5 59.1 L43.9 60.3 L41.2 61.3 L38.4 61.9 L35.5 62.3 L32.6 62.3 L29.7 62.0 L26.8 61.4 L23.9 60.5 L21.2 59.3 L18.6 57.8 L16.2 56.1 L14.0 54.0 L11.9 51.8" fill="none" stroke="#9A5B33" stroke-width="3" stroke-linecap="round"/>
+      <path d="M14 22c5 5 9-2 14 3s8-3 13 2 8-2 14 3" fill="none" stroke="#FFF8F0" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+      <path d="M12 44c6 4 10-3 15 1s9-3 14 1 9-2 16 1" fill="none" stroke="#FFF8F0" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
+    </svg>
+
+    <img class="intro-photo" id="intro-photo" alt="">
+  </div>
+  <p class="intro-caption">Fresh out of the oven</p>
+  <span class="intro-skip">Tap to skip</span>
+</div>
 
 
 <header class="hero">
@@ -1188,5 +1317,29 @@
   }
 </script>
 
+<script>
+  (function () {
+    var root = document.documentElement;
+    if (!root.classList.contains('intro-pending')) return;
+    var intro = document.getElementById('intro');
+    var photo = document.getElementById('intro-photo');
+    var source = document.querySelector('.gallery-grid img[alt*="cinnamon roll on a white plate"]');
+    if (source) photo.src = source.src;
+    try { sessionStorage.setItem('cmwl-intro', '1'); } catch (e) {}
+
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      intro.classList.add('is-done');
+      setTimeout(function () { root.classList.remove('intro-pending'); }, 650);
+    }
+    var timer = setTimeout(finish, 3300);
+    intro.addEventListener('click', function () { clearTimeout(timer); finish(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { clearTimeout(timer); finish(); }
+    });
+  })();
+</script>
 </body>
 </html>
