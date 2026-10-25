@@ -512,10 +512,10 @@
 
   /* ---------- Find us ---------- */
 
-  section.find{
+  .find{
     text-align: center;
   }
-  section.find .panel{
+  .find .panel{
     background: var(--surface-2);
     border-radius: 20px;
     padding: 22px 24px;
@@ -523,11 +523,11 @@
     margin: 18px auto 0;
     text-align: left;
   }
-  section.find .panel p{
+  .find .panel p{
     margin: 0;
     color: var(--ink);
   }
-  section.find .panel p + p{ margin-top: 10px; }
+  .find .panel p + p{ margin-top: 10px; }
 
   .find-row{
     display: flex;
@@ -587,7 +587,7 @@
 
   /* ---------- Contact card ---------- */
 
-  section.contact{
+  .contact{
     display: flex;
     justify-content: center;
   }
@@ -740,19 +740,85 @@
   @media (max-width: 560px){
     .offer-grid{ grid-template-columns: 1fr; }
   }
+
+  /* ---------- Shared grid pieces (all sizes) ---------- */
+
+  .visit-grid{ display: grid; gap: 28px; }
+  .preorder-main{ min-width: 0; }
+  .preorder-form .phone-row select{ width: 108px; }
+
+  /* ---------- Laptop / desktop ---------- */
+
+  @media (min-width: 960px){
+    .wrap{ max-width: 1120px; padding: 0 40px; }
+    section{ padding: 56px 0; }
+    .divider{ max-width: 1040px; }
+
+    header.hero{ padding: 72px 0 56px; text-align: left; }
+    .hero-grid{
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 56px;
+    }
+    .lockup .brand{ font-size: 4.4rem; line-height: 1.02; }
+    .lockup .of-love{ font-size: 3.6rem; }
+    .tagline{ justify-content: flex-start; font-size: 1.15rem; }
+    .lede{ margin: 22px 0 0; max-width: 470px; font-size: 1.12rem; }
+    .illustration{ width: 100%; max-width: 400px; margin: 0 auto; }
+
+    section.about p{ max-width: 680px; }
+    .offer-grid{ max-width: 920px; margin-left: auto; margin-right: auto; gap: 24px; }
+    .offer-card{ padding: 28px 28px; }
+
+    .gallery-grid{ max-width: 1040px; margin-left: auto; margin-right: auto; gap: 20px; }
+    .gallery-grid figcaption{ font-size: 0.95rem; padding: 14px 8px; }
+
+    .preorder-grid{
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 40px;
+      align-items: start;
+      max-width: 1000px;
+      margin: 26px auto 0;
+      text-align: left;
+    }
+    section.preorder .preorder-grid .panel{ margin: 0; position: sticky; top: 32px; }
+    section.preorder .preorder-grid .panel-icon{ margin: 0 0 12px; }
+    .preorder-grid .preorder-form,
+    .preorder-grid .form-success,
+    .preorder-grid .form-error{ max-width: none; margin: 0; }
+
+    .visit-grid{
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+      max-width: 1040px;
+    }
+    .find{ text-align: left; }
+    .find .panel{ max-width: none; margin: 18px 0 0; }
+    .contact{ justify-content: stretch; padding-top: 52px; }
+    .contact .card{ max-width: none; }
+
+    .faq-list{ max-width: 760px; }
+  }
 </style>
 </head>
 <body>
 
 
 <header class="hero">
-  <div class="wrap">
+  <div class="wrap hero-grid">
+   <div class="hero-text">
     <h1 class="lockup">
       <span class="brand">COOKING MADE</span>
       <span class="of-love script">with Love</span>
     </h1>
 
     <p class="tagline">Artisan Bread <span class="heart">&#10084;</span> Sweet Treats</p>
+
+    <p class="lede">Fresh artisan bread and homemade sweet treats, baked with love and sold right from our table at the farmers market.</p>
+   </div>
 
     <svg class="illustration" viewBox="0 0 300 300" role="img" aria-label="Illustration of bread, a cookie, and a cinnamon roll on a plate, with sprigs and little hearts">
       <circle cx="150" cy="150" r="132" fill="none" stroke="var(--rose-line)" stroke-width="2"/>
@@ -818,7 +884,6 @@
       </g>
     </svg>
 
-    <p class="lede">Fresh artisan bread and homemade sweet treats, baked with love and sold right from our table at the farmers market.</p>
   </div>
 </header>
 
@@ -888,13 +953,15 @@
   <div class="wrap">
     <p class="eyebrow">Don't Miss Out</p>
     <h2>Reserve Your Favorites</h2>
+    <div class="preorder-grid">
     <div class="panel">
       <div class="panel-icon">
         <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
       </div>
       <p>We often sell out at the market — especially the cinnamon rolls! If your favorite might run out, don't leave it to chance.</p>
-      <p>Fill out the form below, or reach us directly — see <a href="#contact">contact info</a> below. We'll get back to you to confirm.</p>
+      <p>Fill out the preorder form, or reach us directly — see our <a href="#contact">contact info</a>. We'll get back to you to confirm.</p>
     </div>
+    <div class="preorder-main">
 
     <form name="preorder" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="preorder-form" id="preorder-form">
       <input type="hidden" name="form-name" value="preorder" />
@@ -966,13 +1033,16 @@
     <div class="form-error" id="preorder-error" hidden>
       <p>Something went wrong sending that. Please call or text us instead — see contact info below.</p>
     </div>
+    </div>
+    </div>
   </div>
 </section>
 
 <div class="divider" aria-hidden="true"><span class="heart">&#10084;</span></div>
 
-<section class="find">
-  <div class="wrap">
+<section class="visit">
+  <div class="wrap visit-grid">
+<div class="find">
     <p class="eyebrow">Where to Find Us</p>
     <h2>At the Packard Farmers Market</h2>
     <div class="panel">
@@ -998,40 +1068,8 @@
       <p>Look for our table — piled with fresh-baked bread, cinnamon rolls, and more.</p>
       <a class="find-directions" href="https://maps.google.com/?q=49965+Van+Dyke+Ave,+Shelby+Twp,+MI+48317" target="_blank" rel="noopener">Get Directions →</a>
     </div>
-  </div>
-</section>
-
-<div class="divider" aria-hidden="true"><span class="heart">&#10084;</span></div>
-
-<section class="faq">
-  <div class="wrap">
-    <p class="eyebrow">Good to Know</p>
-    <h2>Common Questions</h2>
-    <div class="faq-list">
-      <details>
-        <summary>Do you take preorders?</summary>
-        <p>Yes! Use the preorder form above, or call/text/email us directly. We'll confirm your order — no payment needed until pickup.</p>
-      </details>
-      <details>
-        <summary>What if you're sold out when I arrive?</summary>
-        <p>Preordering guarantees you get what you want. Walk-ins are always welcome too, but popular items like cinnamon rolls can sell out early.</p>
-      </details>
-      <details>
-        <summary>Do you sell anywhere besides the market?</summary>
-        <p>Right now you'll only find us at our table at the Packard Farmers Market, Saturdays 9am&ndash;2pm, May through October.</p>
-      </details>
-      <details>
-        <summary>Can I request a custom order?</summary>
-        <p>Reach out by phone, text, or email and we'll do our best to accommodate special requests.</p>
-      </details>
-    </div>
-  </div>
-</section>
-
-<div class="divider" aria-hidden="true"><span class="heart">&#10084;</span></div>
-
-<section class="contact" id="contact">
-  <div class="wrap" style="padding:0 24px;">
+</div>
+<div class="contact" id="contact">
     <div class="card">
       <div class="card-inner">
         <h2>Get in Touch</h2>
@@ -1066,6 +1104,34 @@
           </a>
         </div>
       </div>
+    </div>
+</div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"><span class="heart">&#10084;</span></div>
+
+<section class="faq">
+  <div class="wrap">
+    <p class="eyebrow">Good to Know</p>
+    <h2>Common Questions</h2>
+    <div class="faq-list">
+      <details>
+        <summary>Do you take preorders?</summary>
+        <p>Yes! Use the preorder form above, or call/text/email us directly. We'll confirm your order — no payment needed until pickup.</p>
+      </details>
+      <details>
+        <summary>What if you're sold out when I arrive?</summary>
+        <p>Preordering guarantees you get what you want. Walk-ins are always welcome too, but popular items like cinnamon rolls can sell out early.</p>
+      </details>
+      <details>
+        <summary>Do you sell anywhere besides the market?</summary>
+        <p>Right now you'll only find us at our table at the Packard Farmers Market, Saturdays 9am&ndash;2pm, May through October.</p>
+      </details>
+      <details>
+        <summary>Can I request a custom order?</summary>
+        <p>Reach out by phone, text, or email and we'll do our best to accommodate special requests.</p>
+      </details>
     </div>
   </div>
 </section>
